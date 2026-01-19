@@ -1,0 +1,51 @@
+export const initialImages = [
+  {
+    id: 1,
+    title: "Cyberpunk City",
+    genre: "Sci-Fi",
+    desc: "Pemandangan malam di Night City.",
+    url: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 2,
+    title: "Tentrem Avante H8 MB-OH1626L",
+    genre: "Simulator",
+    desc: "PO Bagong Avante H8 Single Glass Pariwisata Gass ken...",
+    url: "/public/screenshots/eut2_hq_6966106b.png",
+  },
+  {
+    id: 3,
+    title: "Nissan 180SX",
+    genre: "Racing",
+    desc: "Mobil JDM Style Nissan 180SX Red.",
+    url: "/public/screenshots/Forza Horizon 5 Screenshot 2025.12.20 - 17.43.52.44.png",
+  },
+  {
+    id: 4,
+    title: "Jhon Marston in Action",
+    genre: "Adventure",
+    desc: "Petualangan Jhon Marston dalam berkuda menjelajahi kota Valentine.",
+    url: "/public/screenshots/Red Dead Redemption 2 Screenshot 2025.08.06 - 14.23.00.08.png",
+  },
+  {
+    id: 5,
+    title: "Eve in Action",
+    genre: "Action",
+    desc: "Petualangan Eve dalam mencari kebenaran tentang Nytiba berasal...",
+    url: "/public/screenshots/StellarBlade_251130_23331200000.png",
+  },
+  {
+    id: 6,
+    title: "GTA 5 Mods Indonesia Vibe",
+    genre: "Adventure",
+    desc: "Explorasi GTA 5 Mod Nuansa Indonesia sekali...",
+    url: "/public/screenshots/upscalemedia-3.png",
+  },
+  {
+    id: 7,
+    title: "Subaru BRZ Pandem Bodykit",
+    genre: "Adventure",
+    desc: "Sedang Parkir Sebentar hehe...",
+    url: "/public/screenshots/Grand Theft Auto V Screenshot 2026.01.19 - 12.11.37.39.png",
+  },
+];

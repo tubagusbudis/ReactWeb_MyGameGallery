@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@theme {
+  --color-dark: #0f172a;
+  --color-accent: #6366f1;
+  
+  --font-sans: "Inter", sans-serif;
+  
+  --breakpoint-3xl: 1920px;
+}
+
+body {
+  background-color: #0f172a;
+  color: white;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+html, body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
