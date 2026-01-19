@@ -8,6 +8,7 @@ const UploadModal = ({ isOpen, onClose, onUpload, categories }) => {
     genre: "",
     desc: "",
     file: null,
+    userName: "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -23,7 +24,7 @@ const UploadModal = ({ isOpen, onClose, onUpload, categories }) => {
     setTimeout(() => {
       onUpload(formData);
       setLoading(false);
-      setFormData({ title: "", genre: "", desc: "", file: null }); // Reset form
+      setFormData({ title: "", genre: "", desc: "", file: null, userName: "" }); // Reset form
     }, 1000);
   };
 
@@ -71,6 +72,14 @@ const UploadModal = ({ isOpen, onClose, onUpload, categories }) => {
             }
             required
           />
+
+          {/* Input Nama User Uploaded */}
+          <input
+          placeholder="Nama Pengupload (Uploded)"
+          className="w-full bg-slate-800 border border-slate-700 text-white p-3 rounded-xl focus:outline-none focus:border-accent focus-ring-accent transition-all placeholder-gray-500"
+          onChange={(e) => setFormData({...formData, userName: e.target.value})}
+          required
+           />
 
           <select
             className="w-full bg-slate-800 border border-slate-700 text-white p-3 rounded-xl focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all appearance-none"

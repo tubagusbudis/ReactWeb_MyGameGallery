@@ -56,6 +56,7 @@ function App() {
       title: formData.title,
       genre: formData.genre,
       desc: formData.desc,
+      userName: formData.userName || "Anonymous",
       url: URL.createObjectURL(formData.file),
     };
     setImages([newEntry, ...images]);

@@ -84,7 +84,9 @@ const ImageModal = ({ image, onClose }) => {
               </div>
               <div className="flex items-center gap-3 text-gray-400 text-sm">
                 <User size={16} />
-                <span>By: GamerPro123</span>
+                <span className="text-white font-medium">
+                By: {image.userName || "Admin"}
+                </span>
               </div>
             </div>
           </div>
@@ -99,7 +101,7 @@ const ImageModal = ({ image, onClose }) => {
                 size={20}
                 className="group-hover:-translate-y-1 transition-transform"
               />
-              Download Wallpaper
+              Download Image
             </button>
           </div>
         </div>
