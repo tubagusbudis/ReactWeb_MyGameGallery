@@ -6,7 +6,6 @@ import {
   Instagram,
   Heart,
   Mail,
-  Rocket,
 } from "lucide-react";
 
 const Footer = () => {
@@ -58,7 +57,7 @@ const Footer = () => {
               {[
                 { icon: Github, href: "https://github.com/tubagusbudis" },
                 { icon: Twitter, href: "#" },
-                { icon: Instagram, href: "#" },
+                { icon: Instagram, href: "https://www.instagram.com/guesnt_0" },
                 { icon: Mail, href: "tubagusbudi2018@gmail.com" },
               ].map((social, index) => (
                 <motion.a
@@ -74,7 +73,7 @@ const Footer = () => {
             <p className="mt-6 text-gray-500 text-xs">
               Tertarik kolaborasi? <br />
               <span className="text-accent cursor-pointer hover:underline">
-                contact@gamegallery.com
+                contact@nocturnepicxel.com
               </span>
             </p>
           </div>
