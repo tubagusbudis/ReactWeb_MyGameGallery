@@ -6,6 +6,7 @@ import {
   Instagram,
   Heart,
   Mail,
+  Rocket,
 } from "lucide-react";
 
 const Footer = () => {
@@ -85,12 +86,12 @@ const Footer = () => {
             &copy; {new Date().getFullYear()} GameGallery. All rights reserved.
           </p>
           <p className="flex items-center gap-1">
-            By Tubagus & Gemini AI{" "}
+            by Tubagus Budi S{" "}
             <Heart
               size={14}
               className="text-red-500 fill-red-500 animate-pulse"
             />{" "}
-            menggunakan React & Vite
+            building a website
           </p>
         </div>
       </div>
