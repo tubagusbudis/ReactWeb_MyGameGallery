@@ -1,7 +1,12 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Download, Share2, Maximize2 } from "lucide-react";
+import { div } from "framer-motion/client";
 
 const ImageCard = ({ image, onOpen }) => {
+
+  const [isLoaded, setIsLoaded] = useState(false);
+
   const handleDownload = async (e) => {
     e.stopPropagation();
     try {
@@ -14,6 +19,7 @@ const ImageCard = ({ image, onOpen }) => {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Gagal download gambar:", error);
     }
@@ -28,7 +34,7 @@ const ImageCard = ({ image, onOpen }) => {
         url: image.url,
       });
     } else {
-      alert("Link disalin ke clipboart");
+      alert("Link disalin ke clipboard.");
       navigator.clipboard.writeText(image.url);
     }
   };
@@ -43,12 +49,19 @@ const ImageCard = ({ image, onOpen }) => {
       shadow-lg bg-slate-800 break-inside-avoid mb-4" onClick=
       {() => onOpen(image)}
       >
+
+      {!isLoaded && (
+        <div clasname="absolute inset-0 bg-slate-700 animate-pulse w-full h-full z-0" />
+      )}
     
       <img
         src={image.url}
         alt={image.title}
-        className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-110"
+        onLoad={() => setIsLoaded(true)}
+        className={`w-full h-auto object-cover transition-all duration-500 group-hover:scale-110 relative z-10
+          ${isLoaded ? "opacity-100" : "opacity-0"}`}
       />
+
       {/* Overlay Animasi */}
       <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
         <h3 className="text-lg font-bold text-white">{image.title}</h3>

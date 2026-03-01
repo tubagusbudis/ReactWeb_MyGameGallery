@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { X, UploadCloud, Loader2 } from "lucide-react";
 
-const UploadModal = ({ isOpen, onClose, onUpload, categories }) => {
+const UploadModal = ({ isOpen, onClose, onUpload, categories, session }) => {
   const [formData, setFormData] = useState({
     title: "",
     genre: "",
@@ -75,8 +75,11 @@ const UploadModal = ({ isOpen, onClose, onUpload, categories }) => {
 
           {/* Input Nama User Uploaded */}
           <input
-          placeholder="Nama Pengupload (Uploded)"
-          className="w-full bg-slate-800 border border-slate-700 text-white p-3 rounded-xl focus:outline-none focus:border-accent focus-ring-accent transition-all placeholder-gray-500"
+          value={session?.user?.user_metadata?.username || ""}
+          readOnly
+          disabled
+          placeholder="Nama Pengupload"
+          className="w-full bg-slate-800/50 border border-slate-700 text-white p-3 rounded-xl focus:outline-none focus:border-accent focus-ring-accent transition-all placeholder-gray-500"
           onChange={(e) => setFormData({...formData, userName: e.target.value})}
           required
            />

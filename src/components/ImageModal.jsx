@@ -1,8 +1,11 @@
 import { motion } from "framer-motion";
-import { X, Calendar, User, Download } from "lucide-react";
+import { X, Calendar, User, Download, Share2, Trash2 } from "lucide-react";
 
-const ImageModal = ({ image, onClose }) => {
+const ImageModal = ({ image, onClose, session, onDelete }) => {
   if (!image) return null;
+
+  // 1. TAMBAHKAN INI: Deklarasikan variabel isOwner
+  const isOwner = session?.user?.user_metadata?.username === image.userName;
 
   const handleDownload = async (e) => {
     e.stopPropagation();
@@ -22,6 +25,20 @@ const ImageModal = ({ image, onClose }) => {
       console.error("Gagal download:", error);
       alert("Gagal download gambar. Mohon coba lagi...");
       window.open(image.url, "_blank");
+    }
+  };
+
+  const handleShare = async (e) => {
+    e.stopPropagation();
+    if (navigator.share) {
+      navigator.share({
+        title: image.title,
+        text: `Cek gambar game keren ini: ${image.desc}`,
+        url: image.url,
+      });
+    } else {
+      navigator.clipboard.writeText(image.url);
+      alert("Link disalin ke clipboard!");
     }
   };
 
@@ -74,7 +91,7 @@ const ImageModal = ({ image, onClose }) => {
 
           <div className="space-y-6 flex-1">
             <p className="text-gray-300 leading-relaxed text-sm md:text-base">
-              {image.desc}
+              {image.desc || "Tidak ada deskripsi."}
             </p>
 
             <div className="border-t border-slate-800 pt-6 space-y-3">
@@ -85,24 +102,46 @@ const ImageModal = ({ image, onClose }) => {
               <div className="flex items-center gap-3 text-gray-400 text-sm">
                 <User size={16} />
                 <span className="text-white font-medium">
-                By: {image.userName || "Admin"}
+                  By: {image.userName || "Anonymous"}
                 </span>
               </div>
             </div>
           </div>
 
-          {/* 3. Pasang onClick di Button ini */}
           <div className="mt-8 pt-4 border-t border-slate-800">
-            <button
-              onClick={handleDownload}
-              className="w-full bg-white text-slate-900 font-bold py-3.5 rounded-xl hover:bg-gray-200 transition-all flex items-center justify-center gap-2 shadow-lg group"
-            >
-              <Download
-                size={20}
-                className="group-hover:-translate-y-1 transition-transform"
-              />
-              Download Image
-            </button>
+            {/* 4. PERBAIKI LAYOUT TOMBOL DOWNLOAD & SHARE (Pakai flex gap-3) */}
+            <div className="flex gap-3 mb-3">
+              <button
+                onClick={handleDownload}
+                className="flex-1 bg-white text-slate-900 font-bold py-3.5 rounded-xl hover:bg-gray-200 transition-all flex items-center justify-center gap-2 shadow-lg group"
+              >
+                <Download
+                  size={20}
+                  className="group-hover:-translate-y-1 transition-transform"
+                />
+                Download Image
+              </button>
+
+              <button
+                onClick={handleShare}
+                className="p-3.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white rounded-xl transition-colors flex items-center justify-center"
+                title="Share"
+              >
+                <Share2 size={20} />
+              </button>
+            </div>
+
+            {/* 2. UBAH LOGIKA JADI isOwner (tanpa tanda seru) */}
+            {isOwner && (
+              <button
+                onClick={() => onDelete(image)}
+                className="w-full mt-2 py-3 border border-red-500/50 text-red-400 hover:bg-red-500 hover:text-white bg-red-500/10 rounded-xl font-semibold transition-all flex items-center justify-center gap-2"
+              >
+                {/* 3. UBAH scale JADI size */}
+                <Trash2 size={18} />
+                Delete Image
+              </button>
+            )}
           </div>
         </div>
       </motion.div>

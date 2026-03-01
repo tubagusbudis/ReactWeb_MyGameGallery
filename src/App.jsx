@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Toaster, toast } from "react-hot-toast";
 import { supabase } from "./supabase"; // Pastikan file supabase.js ada di folder src
 
 // Import Komponen
@@ -10,6 +11,8 @@ import UploadModal from "./components/UploadModal";
 import ImageModal from "./components/ImageModal";
 import Footer from "./components/Footer";
 import SplashScreen from "./components/SplashScreen";
+import AuthModal from "./components/AuthModal";
+import ResetPasswordModal from "./components/ResetPasswordModal";
 
 function App() {
   // --- STATE ---
@@ -19,6 +22,9 @@ function App() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // Untuk Splash Screen
+  const [session, setSession] = useState(null);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [isResetPasswordOpen, setIsResetPasswordOpen] = useState(false);
 
   const categories = [
     "All",
@@ -31,6 +37,45 @@ function App() {
     "Horror",
     "Racing",
   ];
+
+  // --- USE EFFECT ---
+  useEffect(() => {
+    window.alert = (message) => {
+      toast(message, {
+        style: {
+          borderRadius: '16px',
+          background: 'rgba(15, 23, 42, 0.4)', 
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          color: '#fff',
+          border: '1px solid rgba(255, 255, 255, 0.1)', 
+          padding: '16px 24px',
+          maxWidth: '350px',
+          boxShadow: '0 4px 30px rgba(0, 0, 0, 0.3)',
+        },
+      });
+    };
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      if (_event === "PASSWORD_RECOVERY") {
+        setIsResetPasswordOpen(true);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    alert("Berhasil logout!");
+  };
 
   // --- 1. FETCH DATA (MENGAMBIL GAMBAR DARI SUPABASE) ---
   const fetchImages = async () => {
@@ -99,7 +144,7 @@ function App() {
             title: formData.title,
             genre: formData.genre,
             desc: formData.desc,
-            user_name: formData.userName || "Anonymous", // Default jika kosong
+            user_name: session?.user?.user_metadata?.username || "Anonymous",
             image_url: imageUrl,
           },
         ])
@@ -135,9 +180,41 @@ function App() {
     });
   }, [images, activeCategory, searchTerm]);
 
+  // --- 4. DELETE DATA (MENGHAPUS GAMBAR DARI SUPABASE) ---
+  const handleDeleteImage = async (imageToDelete) => {
+    const confirmDelete = window.confirm(
+      `Yakin ingin menghapus Gambar "${imageToDelete}"?`,
+    );
+
+    try {
+      const fileName = imageToDelete.url.split("/").pop();
+
+      const { error: storageError } = await supabase.storage
+        .from("game-images")
+        .remove([fileName]);
+
+      if (storageError) throw storageError;
+
+      const { error: dbError } = await supabase
+        .from("gallery")
+        .delete()
+        .eq("id", imageToDelete.id);
+
+      if (dbError) throw dbError;
+
+      setImages(images.filter((img) => img.id !== imageToDelete.id));
+      setSelectedImage(null);
+      alert("Gambar berhasil dihapus!");
+    } catch (error) {
+      console.error("Error deleting:", error);
+      alert("Gagal menghapus gambar: " + error.message);
+    }
+  };
+
   // --- RENDER TAMPILAN ---
   return (
     <div className="min-h-screen bg-slate-950 text-white font-sans">
+    <Toaster position="top-center" reverseOrder={false} />
       <AnimatePresence mode="wait">
         {isLoading ? (
           <SplashScreen key="splash" />
@@ -154,12 +231,25 @@ function App() {
                 searchTerm={searchTerm}
                 setSearchTerm={setSearchTerm}
                 onOpenUpload={() => setIsUploadOpen(true)}
+                session={session}
+                onOpenAuth={() => setIsAuthOpen(true)}
+                onLogout={handleLogout}
               />
 
               <FilterTabs
                 categories={categories}
                 activeCategory={activeCategory}
                 setActiveCategory={setActiveCategory}
+              />
+
+              <AuthModal
+                isOpen={isAuthOpen}
+                onClose={() => setIsAuthOpen(false)}
+              />
+
+              <ResetPasswordModal
+                isOpen={isResetPasswordOpen}
+                onClose={() => setIsResetPasswordOpen(false)}
               />
 
               {/* Gallery Grid */}
@@ -191,6 +281,7 @@ function App() {
                 onClose={() => setIsUploadOpen(false)}
                 onUpload={handleAddImage}
                 categories={categories}
+                session={session}
               />
 
               <AnimatePresence>
@@ -198,6 +289,8 @@ function App() {
                   <ImageModal
                     image={selectedImage}
                     onClose={() => setSelectedImage(null)}
+                    session={session}
+                    onDelete={handleDeleteImage}
                   />
                 )}
               </AnimatePresence>
