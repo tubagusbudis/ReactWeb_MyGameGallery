@@ -1,15 +1,31 @@
 import { motion } from "framer-motion";
-import { X, Calendar, User, Download, Share2, Trash2 } from "lucide-react";
+import {
+  X,
+  Calendar,
+  User,
+  Download,
+  Share2,
+  Trash2,
+  Edit,
+} from "lucide-react";
 
-const ImageModal = ({ image, onClose, session, onDelete }) => {
+const ImageModal = ({ image, onClose, session, onDelete, onEdit }) => {
   if (!image) return null;
 
-  // 1. TAMBAHKAN INI: Deklarasikan variabel isOwner
+  // Cek apakah user yang login adalah pemilik gambar ini
   const isOwner = session?.user?.user_metadata?.username === image.userName;
+
+  // Format tanggal berdasarkan data dari database
+  const formattedDate = image.created_at
+    ? new Date(image.created_at).toLocaleDateString("id-ID", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    : "Tidak diketahui";
 
   const handleDownload = async (e) => {
     e.stopPropagation();
-
     try {
       const response = await fetch(image.url);
       const blob = await response.blob();
@@ -64,7 +80,7 @@ const ImageModal = ({ image, onClose, session, onDelete }) => {
           />
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 bg-black/50 p-2 rounded-full md:hidden text-white z-10"
+            className="absolute top-4 right-4 bg-black/50 p-2 rounded-full md:hidden text-white z-10 hover:bg-black/80 transition-colors"
           >
             <X size={20} />
           </button>
@@ -72,45 +88,51 @@ const ImageModal = ({ image, onClose, session, onDelete }) => {
 
         {/* Kolom Info (Kanan/Bawah) */}
         <div className="w-full md:w-1/3 p-6 md:p-8 flex flex-col overflow-y-auto bg-slate-900 text-white border-l border-slate-800">
+          {/* Header Info */}
           <div className="flex justify-between items-start mb-6">
             <div>
-              <h2 className="text-2xl font-bold leading-tight text-white">
+              <h2 className="text-2xl font-bold leading-tight text-white mb-2">
                 {image.title}
               </h2>
-              <span className="inline-block mt-2 text-accent text-sm font-semibold bg-accent/10 px-3 py-1 rounded-md border border-accent/20">
+              <span className="inline-block text-accent text-sm font-semibold bg-accent/10 px-3 py-1.5 rounded-md border border-accent/20">
                 {image.genre}
               </span>
             </div>
             <button
               onClick={onClose}
-              className="hidden md:block p-2 hover:bg-slate-800 rounded-full transition-colors text-gray-400 hover:text-white"
+              className="hidden md:block p-2 bg-slate-800/50 hover:bg-slate-700 rounded-full transition-colors text-gray-400 hover:text-white"
             >
               <X size={24} />
             </button>
           </div>
 
+          {/* Deskripsi & Meta Data */}
           <div className="space-y-6 flex-1">
-            <p className="text-gray-300 leading-relaxed text-sm md:text-base">
+            <p className="text-gray-300 leading-relaxed text-sm md:text-base whitespace-pre-line">
               {image.desc || "Tidak ada deskripsi."}
             </p>
 
             <div className="border-t border-slate-800 pt-6 space-y-3">
               <div className="flex items-center gap-3 text-gray-400 text-sm">
-                <Calendar size={16} />
-                <span>Uploaded: {new Date().toLocaleDateString()}</span>
+                <Calendar size={16} className="text-accent" />
+                <span>Diunggah: {formattedDate}</span>
               </div>
               <div className="flex items-center gap-3 text-gray-400 text-sm">
-                <User size={16} />
-                <span className="text-white font-medium">
-                  By: {image.userName || "Anonymous"}
+                <User size={16} className="text-accent" />
+                <span>
+                  Oleh:{" "}
+                  <span className="text-white font-medium">
+                    {image.userName || "Anonymous"}
+                  </span>
                 </span>
               </div>
             </div>
           </div>
 
-          <div className="mt-8 pt-4 border-t border-slate-800">
-            {/* 4. PERBAIKI LAYOUT TOMBOL DOWNLOAD & SHARE (Pakai flex gap-3) */}
-            <div className="flex gap-3 mb-3">
+          {/* Area Tombol Aksi */}
+          <div className="mt-8 pt-6 border-t border-slate-800">
+            {/* Tombol Download & Share */}
+            <div className="flex gap-3 mb-4">
               <button
                 onClick={handleDownload}
                 className="flex-1 bg-white text-slate-900 font-bold py-3.5 rounded-xl hover:bg-gray-200 transition-all flex items-center justify-center gap-2 shadow-lg group"
@@ -124,23 +146,37 @@ const ImageModal = ({ image, onClose, session, onDelete }) => {
 
               <button
                 onClick={handleShare}
-                className="p-3.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white rounded-xl transition-colors flex items-center justify-center"
+                className="p-3.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white rounded-xl transition-colors flex items-center justify-center group"
                 title="Share"
               >
-                <Share2 size={20} />
+                <Share2
+                  size={20}
+                  className="group-hover:scale-110 transition-transform"
+                />
               </button>
             </div>
 
-            {/* 2. UBAH LOGIKA JADI isOwner (tanpa tanda seru) */}
+            {/* Tombol Edit & Hapus (Hanya Muncul Jika isOwner) */}
             {isOwner && (
-              <button
-                onClick={() => onDelete(image)}
-                className="w-full mt-2 py-3 border border-red-500/50 text-red-400 hover:bg-red-500 hover:text-white bg-red-500/10 rounded-xl font-semibold transition-all flex items-center justify-center gap-2"
-              >
-                {/* 3. UBAH scale JADI size */}
-                <Trash2 size={18} />
-                Delete Image
-              </button>
+              <div className="flex gap-3 w-full">
+                {/* Tombol Edit (Kini menggunakan flex-1 agar sama besar) */}
+                <button
+                  onClick={onEdit}
+                  className="flex-1 flex items-center justify-center gap-2 bg-blue-500/10 text-blue-400 border border-blue-500/30 hover:bg-blue-600 hover:text-white hover:border-blue-500 py-3 rounded-xl transition-all font-semibold"
+                >
+                  <Edit size={18} />
+                  Edit
+                </button>
+
+                {/* Tombol Delete (Kini menggunakan flex-1 agar sama besar) */}
+                <button
+                  onClick={() => onDelete(image)}
+                  className="flex-1 flex items-center justify-center gap-2 bg-red-500/10 text-red-400 border border-red-500/30 hover:bg-red-600 hover:text-white hover:border-red-500 py-3 rounded-xl transition-all font-semibold"
+                >
+                  <Trash2 size={18} />
+                  Delete
+                </button>
+              </div>
             )}
           </div>
         </div>

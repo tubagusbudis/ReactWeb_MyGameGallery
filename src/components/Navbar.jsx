@@ -9,6 +9,8 @@ import {
   LogIn,
 } from "lucide-react";
 
+import TrueFocus from "./TrueFocus";
+
 const Navbar = ({ searchTerm, setSearchTerm, onOpenUpload, session, onOpenAuth, onLogout }) => {
 
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -27,10 +29,17 @@ const Navbar = ({ searchTerm, setSearchTerm, onOpenUpload, session, onOpenAuth, 
   return (
     <header className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 pt-4">
       <div className="flex items-center gap-2">
-        <Gamepad2 className="text-accent" size={32} />
-        <h1 className="text-3xl font-extrabold bg-gradient-to-r from-blue-400 to-accent bg-clip-text text-transparent">
-          GameGallery
-        </h1>
+        <Gamepad2 className="text-accent" size={55} />
+        <div className="text-2xl font-extrabold text-white tracking-wider">
+          <TrueFocus
+            sentence="Game Gallery"
+            manualMode={false}
+            blurAmount={5}
+            borderColor="#5227FF"
+            animationDuration={0.5}
+            pauseBetweenAnimations={1}
+          />
+        </div>
       </div>
 
       <div className="relative w-full md:w-96">
