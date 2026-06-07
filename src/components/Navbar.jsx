@@ -11,8 +11,14 @@ import {
 
 import TrueFocus from "./TrueFocus";
 
-const Navbar = ({ searchTerm, setSearchTerm, onOpenUpload, session, onOpenAuth, onLogout }) => {
-
+const Navbar = ({
+  searchTerm,
+  setSearchTerm,
+  onOpenUpload,
+  session,
+  onOpenAuth,
+  onLogout,
+}) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -126,7 +132,7 @@ const Navbar = ({ searchTerm, setSearchTerm, onOpenUpload, session, onOpenAuth, 
             className="p-2.5 bg-slate-800 border border-slate-700 hover:bg-slate-700 hover:text-white text-gray-400 rounded-full transition-all focus:outline-none focus:ring-2 focus:ring-accent"
             title="Login / Daftar"
           >
-            <LogIn size={20} />
+            <User size={20} />
           </button>
         )}
       </div>
