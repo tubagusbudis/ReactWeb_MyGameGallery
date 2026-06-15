@@ -1,6 +1,14 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { X, Mail, Lock, User as UserIcon, Loader2, Eye, EyeOff } from "lucide-react";
+import {
+  X,
+  Mail,
+  Lock,
+  User as UserIcon,
+  Loader2,
+  Eye,
+  EyeOff,
+} from "lucide-react";
 import { supabase } from "../supabase";
 
 const AuthModal = ({ isOpen, onClose }) => {
@@ -24,49 +32,55 @@ const AuthModal = ({ isOpen, onClose }) => {
     try {
       if (isForgotPassword) {
         // --- PROSES LUPA PASSWORD ---
-        const { error } = await supabase.auth.resetPasswordForEmail(formData.email, {
-          redirectTo: window.location.origin,
-        });
+        const { error } = await supabase.auth.resetPasswordForEmail(
+          formData.email,
+          {
+            redirectTo: window.location.origin,
+          },
+        );
         if (error) throw error;
-        alert("Link reset password telah dikirim! Silakan cek kontak masuk email Anda.");
+        alert(
+          "Link reset password telah dikirim! Silakan cek kontak masuk email Anda.",
+        );
         setIsForgotPassword(false);
         onClose();
-
       } else if (isLogin) {
-          // --- PROSES LOGIN ---
-          const { error } = await supabase.auth.signInWithPassword({
-            email: formData.email,
-            password: formData.password,
-          });
-          if (error) throw error;
-          alert("Login Berhasil!");
-          onClose();
-        } else {
-          // --- PROSES REGISTER ---
-          const passwordRegex =
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+        // --- PROSES LOGIN ---
+        const { error } = await supabase.auth.signInWithPassword({
+          email: formData.email,
+          password: formData.password,
+        });
+        if (error) throw error;
+        alert("Login Berhasil!");
+        onClose();
+      } else {
+        // --- PROSES REGISTER ---
+        const passwordRegex =
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
-          if (!passwordRegex.test(formData.password)) {
-            alert(
-              "Gagal: Password harus minimal 8 karakter, mengandung huruf besar, huruf kecil, angka, dan simbol/karakter khusus.",
-            );
-            setLoading(false);
-            return;
-          }
-
-          const { error } = await supabase.auth.signUp({
-            email: formData.email,
-            password: formData.password,
-            options: {
-              data: {
-                username: formData.username,
-              },
-            },
-          });
-          if (error) throw error;
-          alert("Akun berhasil dibuat! Silakan login.");
-          setIsLogin(true); // Pindah ke tab login
+        if (!passwordRegex.test(formData.password)) {
+          alert(
+            "Gagal: Password harus minimal 8 karakter, mengandung huruf besar, huruf kecil, angka, dan simbol/karakter khusus.",
+          );
+          setLoading(false);
+          return;
         }
+
+        const { error } = await supabase.auth.signUp({
+          email: formData.email,
+          password: formData.password,
+          options: {
+            data: {
+              username: formData.username,
+            },
+          },
+        });
+        if (error) throw error;
+        alert(
+          "Akun berhasil dibuat! Link verifikasi telah dikirim! Silahkan cek email Anda.",
+        );
+        setIsLogin(true); // Pindah ke tab login
+      }
     } catch (error) {
       alert("Error: " + error.message);
     } finally {
@@ -75,13 +89,13 @@ const AuthModal = ({ isOpen, onClose }) => {
   };
 
   const toggleMode = (mode) => {
-    if (mode  === 'login') {
-      setLoading(true);
+    if (mode === "login") {
+      setIsLogin(true);
       setIsForgotPassword(false);
-    } else if (mode === 'register') {
+    } else if (mode === "register") {
       setIsLogin(false);
       setIsForgotPassword(false);
-    } else if (mode === 'forgot') {
+    } else if (mode === "forgot") {
       setIsForgotPassword(true);
     }
     setShowPassword(false);
