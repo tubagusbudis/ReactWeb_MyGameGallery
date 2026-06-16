@@ -1,16 +1,56 @@
-# React + Vite
+# 🎮 Game Gallery
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Game Gallery Banner](assets/banner.png) **Game Gallery** adalah platform web interaktif yang dirancang khusus untuk para *gamers* agar bisa mengoleksi, membagikan, dan menemukan *screenshot* momen epik dari berbagai *game* favorit. Dibangun dengan antarmuka yang modern, responsif, dan dipenuhi animasi mulus ala *cyberpunk* / AAA game UI.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Fitur Utama (Key Features)
 
-## React Compiler
+* **🔐 Autentikasi Super Aman:** Sistem *Login*, *Register*, dan *Reset Password* terintegrasi langsung dengan Supabase Auth.
+* **🖼️ Manajemen Konten (CRUD):** * **Create:** Upload *screenshot* game resolusi tinggi.
+    * **Read:** Eksplorasi galeri dengan fitur *Search* dan *Filter* berdasarkan *Genre* (RPG, FPS, Action, dll).
+    * **Update:** Edit judul, genre, deskripsi, atau ganti gambar kapan saja.
+    * **Delete:** Hapus postingan dengan mudah.
+* **🛡️ Role-Based Authorization:** *Row Level Security* (RLS) aktif. User hanya bisa mengedit dan menghapus konten milik mereka sendiri.
+* **📥 Download & Share:** Simpan gambar orang lain ke *device* lo atau bagikan *link*-nya langsung ke *circle* lo.
+* **✨ UI/UX & Animasi Premium:** * Efek *Floating Lines* interaktif di *background*.
+    * Teks logo *TrueFocus* yang estetik.
+    * Transisi modal dan *card* yang sangat mulus.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🛠️ Teknologi yang Digunakan (Tech Stack)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Project ini dibangun menggunakan ekosistem *modern web development*:
+
+* **Frontend Framework:** React.js (via Vite)
+* **Styling:** Tailwind CSS
+* **Backend as a Service (BaaS):** Supabase (Database, Auth, & Storage)
+* **Animation Library:** Framer Motion
+* **Icons:** Lucide React
+* **UI Components:** React Bits (TrueFocus & FloatingLines)
+
+---
+
+## 🚀 Cara Menjalankan Project Secara Lokal (Getting Started)
+
+Buat lo yang mau *clone* dan *run* project ini di komputer sendiri, ikutin langkah-langkah simpel di bawah ini.
+
+### 1. Persyaratan (Prerequisites)
+Pastikan lo udah *install*:
+* [Node.js](https://nodejs.org/) (versi 16 atau terbaru)
+* [Git](https://git-scm.com/)
+* Akun [Supabase](https://supabase.com/)
+
+### 2. Instalasi
+Buka terminal dan jalankan perintah ini secara berurutan:
+
+```bash
+# Clone repository ini
+git clone [https://github.com/](https://github.com/)[USERNAME_GITHUB_LO]/GameGallery.git
+
+# Masuk ke folder project
+cd GameGallery
+
+# Install semua dependencies
+npm install
